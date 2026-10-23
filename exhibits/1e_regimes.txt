@@ -1,0 +1,13 @@
+Exhibit 1E — momentum spread and lagged 12-month market volatility
+Dec 1995–Jul 2023. Momentum is the value-weighted high-minus-low prior-return decile, percent per month.
+Lagged vol is the annualized standard deviation of Mkt-RF over the 12 months ending the previous month.
+High vol means lagged vol at or above the sample median. t-stats ignore autocorrelation.
+
+Median lagged ann. vol: 14.37%
+bucket           n      mean       t
+Low vol        166     1.551    3.32
+High vol       166    -0.310   -0.36
+All            332     0.621    1.27
+
+OLS: monthly momentum spread (%) = a + b × lagged ann. vol (%)
+a = 3.847    b = -0.2210    t(b) = -2.71    n = 332    R = -0.148

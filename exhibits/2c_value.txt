@@ -1,0 +1,11 @@
+Exhibit 2C — book-to-price portfolios, formation Dec 1998–Nov 2018 (return months Jan 1999–Dec 2018)
+Long-only, fully invested. Book-to-price score = 1 − price-to-book percentile. Returns winsorized within each month at the 99th percentile.
+ann_return is the compounded annualized return. ann_vol, tracking error, and max_w are in percent.
+ann_vol and tracking error are monthly std × sqrt(12). n_names is a count. Tracking error is versus the cap-weight proxy.
+Names and max weight are measured on the Nov 2018 formation date.
+
+strategy              ann_return   ann_vol      te  n_names   max_w
+Cap-weight proxy            7.39     16.45    0.00     1109    0.18
+EW top 20% B/P             16.01     22.10    9.61      222    0.45
+B/P score                  12.16     18.77    5.01     1099    0.18
+B/P score × cap             9.00     17.34    2.84     1099    0.38

@@ -1,0 +1,7 @@
+Exhibit 2A — does the price-to-book percentile behave like market value / book?
+Within each month, Spearman correlation of Pb with (market-cap percentile − book percentile).
+The percentiles are not divided. Pb is price-to-book, so a positive correlation is the expected sign.
+Sample: 1998-11 to 2019-03, 245 months, 1207 stocks.
+
+Median Spearman correlation: 0.876
+Share of months with a positive correlation: 1.000

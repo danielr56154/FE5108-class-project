@@ -1,0 +1,13 @@
+Exhibit 1C — annualized average return, volatility, and Sharpe ratio
+MSCI USA gross total-return indexes, USD, Jan 1995–Jul 2023. T-bill is Ken French RF.
+Multi-factor is the equal-weighted average of Value, Min vol, Equal weight, and Momentum each month.
+Annualized average return = 12 × arithmetic monthly mean. Sharpe = (ann. return − ann. RF) / (monthly std × sqrt(12)).
+
+strategy          ann_return   ann_vol  sharpe
+USA                    11.22     15.44    0.59
+Value                   9.87     15.27    0.50
+Min vol                10.42     12.09    0.68
+Equal weight           11.81     17.13    0.56
+Momentum               13.38     16.34    0.69
+Multi-factor           11.37     14.40    0.64
+T-bill                  2.16      0.61    0.00

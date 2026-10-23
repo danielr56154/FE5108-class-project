@@ -1,0 +1,8 @@
+Exhibit 2D — correlation of value-portfolio excess returns
+Excess return is the portfolio minus the cap-weight proxy. HML is the Ken French value spread over the same months (Jan 1999–Dec 2018).
+
+                  EW top 20%     B/P score   Score × cap           HML
+EW top 20%              1.00          0.96          0.76          0.56
+B/P score               0.96          1.00          0.77          0.58
+Score × cap             0.76          0.77          1.00          0.85
+HML                     0.56          0.58          0.85          1.00

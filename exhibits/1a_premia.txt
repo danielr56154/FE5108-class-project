@@ -1,0 +1,11 @@
+Exhibit 1A — arithmetic mean and t-stat of monthly factor premia
+Ken French US factors, percent per month. t = mean / (std / sqrt(n)). No autocorrelation adjustment.
+Pre-publication: Jan 1927–Dec 1992. Post-publication: Jan 1993–Jul 2023.
+
+window                      factor         n      mean       t
+Jan 1927–Dec 1992           Mkt-RF       792     0.655    3.22
+Jan 1927–Dec 1992           SMB          792     0.240    2.13
+Jan 1927–Dec 1992           HML          792     0.435    3.33
+Jan 1993–Jul 2023           Mkt-RF       367     0.719    3.09
+Jan 1993–Jul 2023           SMB          367     0.099    0.60
+Jan 1993–Jul 2023           HML          367     0.146    0.83

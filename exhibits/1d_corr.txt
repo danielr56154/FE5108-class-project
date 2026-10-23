@@ -1,0 +1,9 @@
+Exhibit 1D — correlation of MSCI factor spreads with Fama-French spreads
+Jan 1995–Jul 2023. MSCI spreads are the smart-beta index minus MSCI USA.
+FF momentum is value-weighted Hi PRIOR minus Lo PRIOR. Low − high beta is value-weighted Lo 10 minus Hi 10.
+
+                             HML             SMB     FF momentum Low − high beta
+Value − USA                 0.73           -0.18           -0.24            0.41
+Min vol − USA               0.23           -0.31            0.30            0.81
+EW − USA                    0.43            0.32           -0.45           -0.20
+Mom − USA                  -0.22            0.08            0.64            0.14

@@ -1,0 +1,6 @@
+Exhibit 2B — cap-weight proxy versus MSCI USA
+Proxy weights are proportional to the standardized market-cap percentile. Return months Jan 1999–Dec 2018.
+MSCI USA is the gross large+mid-cap total-return index. Both series are monthly total returns.
+
+Months: 240
+Correlation: 0.907

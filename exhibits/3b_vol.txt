@@ -1,0 +1,17 @@
+Exhibit 3B–3D — annualized realized volatility
+49 Ken French value-weighted industry total returns. Volatility = std of monthly portfolio returns × sqrt(12), in percent.
+Missing codes (−99.99 or −999) in Jan 1995–Jul 2023: 0
+
+In-sample Jan 1995–Dec 2004, weights as of Dec 2004
+  Min-var (shorts)                7.59
+  Min-var (long-only)            10.32
+  Inverse-vol                    13.99
+
+Out-of-sample Jan 2005–Jul 2023, weights frozen at Dec 2004
+  Min-var (shorts)               16.75
+  Min-var (long-only)            14.29
+  Inverse-vol                    17.23
+
+Jan 2016–Jul 2023, long-only minimum variance
+  Weights as of Dec 2004         14.52
+  Weights as of Dec 2015         12.81

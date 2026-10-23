@@ -1,0 +1,26 @@
+Exhibit 3E — ten industries with the highest cumulative total return in each crisis
+Ken French 49 value-weighted industry portfolios. Cumulative return is the compounded monthly total return, in percent.
+
+Sep 2008–Feb 2009
+  Gold          -11.64
+  Beer          -22.26
+  PerSv         -24.08
+  Drugs         -24.14
+  Food          -24.32
+  Meals         -26.06
+  Soda          -29.43
+  Smoke         -29.61
+  Rtail         -30.02
+  Util          -32.58
+
+Feb 2020–Mar 2020
+  Gold           -3.21
+  Drugs          -7.07
+  Rtail         -10.26
+  Smoke         -12.71
+  Food          -13.14
+  Softw         -14.57
+  Hshld         -14.64
+  LabEq         -15.88
+  Boxes         -16.23
+  Paper         -16.47
