@@ -1,6 +1,6 @@
 # Part 3
 
-`data/industries.xlsx`, the value-weighted monthly total-return block only. 49 industries, January 1995–July 2023. French reports percent; the code divides by 100. A value of −99.99 or −999 would be missing. The count of missing cells in this window is written at the top of `exhibits/3b_vol.txt`. MSCI USA levels, used for the wealth chart, come from `data/ff_msci.xlsx`.
+`data/industries.xlsx`, the value-weighted monthly total-return block only. 49 industries, January 1995–July 2023. French reports percent; the code divides by 100. A value of −99.99 or −999 would be missing. The count of missing cells in this window is written at the top of `exhibits/3b_c_d.txt`. MSCI USA levels, used for the wealth chart, come from `data/ff_msci.xlsx`.
 
 The December 2004 books use the covariance of January 1995–December 2004 (120 months). The December 2015 book uses January 2006–December 2015. Covariance is the sample covariance (divisor \(T-1\)).
 
@@ -32,7 +32,7 @@ $$
 
 ## 3B and 3C
 
-`exhibits/3b_vol.txt`
+`exhibits/3b_c_d.txt`
 
 Realized volatility is the standard deviation of the monthly portfolio return \(w'r_t\) over the stated window, times \(\sqrt{12}\), in percent. In-sample is January 1995–December 2004 with the December 2004 weights. Out-of-sample is January 2005–July 2023 with those same weights held fixed.
 

@@ -207,7 +207,7 @@ def write_vol(ind, books, long_2015, missing):
             vol, _ = realized(weights, returns)
             lines.append(f"  {label:<28}{100 * vol:8.2f}")
         lines.append("")
-    (OUT / "3b_vol.txt").write_text("\n".join(lines).rstrip() + "\n")
+    (OUT / "3b_c_d.txt").write_text("\n".join(lines).rstrip() + "\n")
 
 
 def write_wealth(ind, weights, levels):

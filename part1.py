@@ -242,8 +242,8 @@ def write_corr(msci, factors, mom, low_beta):
         lines.append(f"{name:<16}" + "".join(f"{value:16.2f}" for value in row))
     (OUT / "1d_corr.txt").write_text("\n".join(lines) + "\n")
 
-    fig, ax = plt.subplots(figsize=(7.2, 3.8))
-    image = ax.imshow(corr.to_numpy(), cmap="coolwarm", vmin=-1, vmax=1)
+    fig, ax = plt.subplots(figsize=(5.1, 4.8))
+    image = ax.imshow(corr.to_numpy(), cmap="coolwarm", vmin=-1, vmax=1, aspect="equal")
     ax.set_xticks(range(corr.shape[1]), corr.columns, rotation=20, ha="right")
     ax.set_yticks(range(corr.shape[0]), corr.index)
     for i in range(corr.shape[0]):
@@ -251,8 +251,14 @@ def write_corr(msci, factors, mom, low_beta):
             ax.text(j, i, f"{corr.iloc[i, j]:.2f}", ha="center", va="center", fontsize=9)
     fig.colorbar(image, ax=ax, fraction=0.046, pad=0.04)
     ax.set_title("Factor-spread correlations, Jan 1995–Jul 2023")
-    save_fig(fig, "1d_corr.png",
-             "MSCI gross total return minus MSCI USA, vs Ken French value-weighted spreads. USA large and mid cap.")
+    fig.tight_layout(rect=(0, 0.10, 1, 1))
+    fig.text(
+        0.5, 0.01,
+        "MSCI gross total return minus MSCI USA,\nvs Ken French value-weighted spreads. USA large and mid cap.",
+        ha="center", va="bottom", fontsize=8, color="#444444",
+    )
+    fig.savefig(OUT / "1d_corr.png")
+    plt.close(fig)
 
 
 def write_momentum_vol(mkt, mom):
