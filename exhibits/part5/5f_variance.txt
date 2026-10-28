@@ -1,0 +1,13 @@
+Exhibit 5F — what drives multi-factor tracking error
+Active returns versus MSCI USA, Jan 1995–Jul 2023.
+The variance of the multi-factor active return equals the average of its covariances with the four component active returns.
+Share is that covariance divided by the sum of the four covariances.
+
+Variance of multi-factor active return: 9.558134e-05
+Average of the four covariances:       9.558134e-05
+
+component           covariance     share
+Value             8.891878e-05     23.3%
+Min vol           1.302834e-04     34.1%
+Equal weight      6.826789e-05     17.9%
+Momentum          9.485525e-05     24.8%

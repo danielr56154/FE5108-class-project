@@ -21,18 +21,30 @@ from scipy.optimize import minimize
 ROOT = Path(__file__).resolve().parent
 IND = ROOT / "data" / "industries.xlsx"
 FF = ROOT / "data" / "ff_msci.xlsx"
-OUT = ROOT / "exhibits"
+OUT = ROOT / "exhibits" / "part3"
 
 plt.rcParams.update({
     "figure.dpi": 140,
     "savefig.bbox": "tight",
-    "axes.spines.top": False,
-    "axes.spines.right": False,
+    "savefig.facecolor": "white",
+    "figure.facecolor": "white",
+    "axes.facecolor": "white",
+    "axes.edgecolor": "#333333",
+    "axes.labelcolor": "#222222",
+    "axes.titlecolor": "#1F4E79",
+    "text.color": "#222222",
+    "axes.grid": True,
+    "grid.color": "#E6E6E6",
+    "grid.linewidth": 0.7,
+    "axes.axisbelow": True,
     "font.size": 10,
 })
+BLUE, ORANGE = "#4C78A8", "#F58518"
 
+NAVY = PatternFill("solid", fgColor="1F4E79")
 GREEN = PatternFill("solid", fgColor="C6EFCE")
 RED = PatternFill("solid", fgColor="FFC7CE")
+SUM = PatternFill("solid", fgColor="F2F2F2")
 
 
 def month_stamp(value):
@@ -154,7 +166,8 @@ def write_weights(names, books):
     ws["A1"].font = Font(italic=True, size=9, color="444444")
     for col, header in enumerate(headers, start=1):
         cell = ws.cell(2, col, header)
-        cell.font = Font(bold=True)
+        cell.font = Font(bold=True, color="FFFFFF")
+        cell.fill = NAVY
     for i, name in enumerate(names):
         ws.cell(i + 3, 1, name)
         for j, weights in enumerate(columns):
@@ -162,10 +175,12 @@ def write_weights(names, books):
             ws.cell(i + 3, j + 2).number_format = "0.000000"
     sum_row = len(names) + 3
     ws.cell(sum_row, 1, "Sum").font = Font(bold=True)
+    ws.cell(sum_row, 1).fill = SUM
     for j, weights in enumerate(columns):
         cell = ws.cell(sum_row, j + 2, float(weights.sum()))
         cell.number_format = "0.000000"
         cell.font = Font(bold=True)
+        cell.fill = SUM
     for j, weights in enumerate(columns):
         order = np.argsort(weights, kind="mergesort")
         for rank in order[-5:]:
@@ -220,19 +235,16 @@ def write_wealth(ind, weights, levels):
     dates_m = mkt.index.to_timestamp("M")
 
     fig, ax = plt.subplots(figsize=(8.2, 4.6))
-    ax.axvspan(datetime(2008, 9, 1), datetime(2009, 2, 28), color="#E45756", alpha=0.15)
-    ax.axvspan(datetime(2020, 2, 1), datetime(2020, 3, 31), color="#F58518", alpha=0.18)
-    ax.plot(dates_p, port_wealth.to_numpy(), color="#4C78A8", lw=1.5, label="Long-only min-var")
-    ax.plot(dates_m, mkt.to_numpy(), color="#333333", lw=1.3, label="MSCI USA")
+    ax.axvspan(datetime(2008, 9, 1), datetime(2009, 2, 28), color=BLUE, alpha=0.12, zorder=0)
+    ax.axvspan(datetime(2020, 2, 1), datetime(2020, 3, 31), color=ORANGE, alpha=0.18, zorder=0)
+    ax.plot(dates_p, port_wealth.to_numpy(), color=BLUE, lw=1.6, label="Long-only min-var", zorder=3)
+    ax.plot(dates_m, mkt.to_numpy(), color=ORANGE, lw=1.5, label="MSCI USA", zorder=3)
     ax.set_yscale("log", base=2)
     ax.yaxis.set_major_locator(LogLocator(base=2))
     ax.yaxis.set_major_formatter(ScalarFormatter())
     ax.set_ylabel("Value of $1")
     ax.set_title("Growth of $1, 31 Dec 2004–Jul 2023")
     ax.legend(frameon=False)
-    fig.text(0.0, -0.02,
-             "Log base 2. Shaded: Sep 2008–Feb 2009 and Feb–Mar 2020. Industry weights frozen at 31 Dec 2004. Sources: Ken French, MSCI USA gross.",
-             fontsize=7, color="#444444")
     fig.tight_layout()
     fig.savefig(OUT / "3e_wealth.png")
     plt.close(fig)
@@ -260,7 +272,7 @@ def write_crises(ind):
 
 
 def main():
-    OUT.mkdir(exist_ok=True)
+    OUT.mkdir(parents=True, exist_ok=True)
     ind = load_industries()
     if ind.shape[1] != 49:
         raise RuntimeError(f"expected 49 industries, got {ind.shape[1]}")

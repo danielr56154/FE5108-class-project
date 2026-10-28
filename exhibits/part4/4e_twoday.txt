@@ -1,0 +1,6 @@
+Exhibit 4E — two-day path, ignoring daily drag
+NVDA is +10% on day 1 and −9% on day 2. NVDL is assumed to deliver exactly 2× each day’s stock return.
+
+                     day 1     day 2   two-day
+NVDA                  10.0      -9.0       0.1
+NVDL                  20.0     -18.0      -1.6

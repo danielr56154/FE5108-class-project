@@ -6,7 +6,7 @@ On the beta sheet, Excel turned the middle decile labels into dates. The low-bet
 
 ## 1A
 
-`exhibits/1a_premia.txt`
+`exhibits/part1/1a_premia.txt`
 
 Arithmetic mean of the monthly spread, in percent per month. A spread is not a funded portfolio, so the mean that the t-stat tests is the arithmetic mean.
 
@@ -33,7 +33,7 @@ Source: MSCI Momentum Indexes Methodology, December 2013, the PDF linked in the 
 
 ## 1C
 
-`exhibits/1c_performance.txt` and `exhibits/1c_performance.png`
+`exhibits/part1/1c_performance.txt` and `exhibits/part1/1c_performance.png`
 
 January 1995–July 2023. The multi-factor return in a month is the equal-weighted average of the value, minimum-volatility, equal-weighted, and momentum index returns. It does not include MSCI USA. The risk-free rate is Ken French `RF`.
 
@@ -47,13 +47,13 @@ $$
 
 ## 1D
 
-`exhibits/1d_corr.txt` and `exhibits/1d_corr.png`
+`exhibits/part1/1d_corr.txt` and `exhibits/part1/1d_corr.png`
 
 Same months as 1C. Each MSCI spread is the smart-beta index minus MSCI USA. The four French spreads are `HML`, `SMB`, the value-weighted momentum decile spread, and the value-weighted low-minus-high beta spread.
 
 ## 1E
 
-`exhibits/1e_momentum_vol.png` and `exhibits/1e_regimes.txt`
+`exhibits/part1/1e_momentum_vol.png` and `exhibits/part1/1e_regimes.txt`
 
 The volatility dated at month \(t\) is the annualized standard deviation of `Mkt-RF` over the 12 months ending in \(t\). The momentum month is paired with the volatility dated the previous month, so month \(t\)’s market return is not inside the signal. The paired sample is December 1995–July 2023.
 

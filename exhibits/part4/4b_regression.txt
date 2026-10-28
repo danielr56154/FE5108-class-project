@@ -1,0 +1,9 @@
+Exhibit 4B — daily NVDL on daily NVDA, with an intercept
+1 Feb 2024–30 Aug 2024. Returns are decimals in the regression; coefficients below are in daily-return units.
+95% confidence intervals use a t critical value with n − 2 degrees of freedom.
+The factsheet objective, before fees and expenses, is a slope of 2 and no intercept.
+
+n = 147    df = 145    R = 0.9997
+coef        estimate     std_err      ci_low     ci_high
+a           -0.00061     0.00016    -0.00093    -0.00029
+b            1.99597     0.00434     1.98741     2.00454

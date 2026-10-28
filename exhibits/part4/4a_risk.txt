@@ -1,0 +1,8 @@
+Exhibit 4A — daily risk of NVDA and NVDL
+Daily total returns, 1 Feb 2024–30 Aug 2024, 147 days. Not annualized.
+VaR 95% is minus the 5th percentile of daily returns, so it is a loss.
+CVaR 95% is minus the average return on days at or below that percentile.
+
+               std    var_95   cvar_95  tail_n
+NVDA          3.75      6.12      7.07       8
+NVDL          7.48     12.03     14.16       8

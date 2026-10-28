@@ -1,0 +1,10 @@
+Exhibit 5D — MSCI USA Value and the factor replica
+Jan 1995–Jul 2023. The replica uses the 5B slopes on RF, Mkt-RF, HML, and SMB, and drops the intercept.
+Annualized return is 12 × the arithmetic monthly mean. Sharpe matches Part 1.
+Returns are gross of fees and trading costs.
+
+Correlation of the replica with MSCI Value: 0.974
+
+strategy          ann_return   ann_vol  sharpe
+MSCI Value              9.87     15.27    0.50
+Replica                10.73     14.87    0.58

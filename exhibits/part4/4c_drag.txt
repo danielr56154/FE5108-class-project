@@ -1,0 +1,8 @@
+Exhibit 4C — annualized regression intercept versus the net expense ratio
+The intercept is the daily NVDL return when NVDA’s return is zero. Annualized figure = intercept × 252.
+Net expense ratio is the factsheet’s fee after the waiver in force through 31 Dec 2024.
+Gross expense ratio on the same factsheet is 1.57%; management fee is 0.99%.
+
+Daily intercept: -0.0612%
+× 252: -15.41%
+Net expense ratio: 1.15%

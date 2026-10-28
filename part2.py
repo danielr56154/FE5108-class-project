@@ -17,17 +17,27 @@ from openpyxl import load_workbook
 ROOT = Path(__file__).resolve().parent
 STOCKS = ROOT / "data" / "stocks.csv"
 FF = ROOT / "data" / "ff_msci.xlsx"
-OUT = ROOT / "exhibits"
+OUT = ROOT / "exhibits" / "part2"
 FORM_START = pd.Period("1998-12", freq="M")
 FORM_END = pd.Period("2018-11", freq="M")
 
 plt.rcParams.update({
     "figure.dpi": 140,
     "savefig.bbox": "tight",
-    "axes.spines.top": False,
-    "axes.spines.right": False,
+    "savefig.facecolor": "white",
+    "figure.facecolor": "white",
+    "axes.facecolor": "white",
+    "axes.edgecolor": "#333333",
+    "axes.labelcolor": "#222222",
+    "axes.titlecolor": "#1F4E79",
+    "text.color": "#222222",
+    "axes.grid": True,
+    "grid.color": "#E6E6E6",
+    "grid.linewidth": 0.7,
+    "axes.axisbelow": True,
     "font.size": 10,
 })
+BLUE, ORANGE = "#4C78A8", "#F58518"
 
 
 def month_stamp(value):
@@ -50,8 +60,7 @@ def as_period(value):
     return None
 
 
-def save_fig(fig, name, note):
-    fig.text(0.0, -0.02, note, fontsize=7, color="#444444", ha="left", transform=fig.transFigure)
+def save_fig(fig, name):
     fig.tight_layout()
     fig.savefig(OUT / name)
     plt.close(fig)
@@ -104,40 +113,36 @@ def write_cleaning(df):
     months = counts.index.to_timestamp("M")
 
     fig, ax = plt.subplots(figsize=(7.4, 3.6))
-    ax.plot(months, counts.to_numpy(), color="#4C78A8", lw=1.2)
+    ax.plot(months, counts.to_numpy(), color=BLUE, lw=1.4)
     ax.set_ylabel("Number of stocks")
     ax.set_title("Stocks in the file each month")
-    save_fig(fig, "2a_counts.png",
-             "Anonymized US stock extract, Nov 1998–Mar 2019. Source: Coqueret and Guida, Machine Learning for Factor Investing.")
+    save_fig(fig, "2a_counts.png")
 
     raw = df["R1M_Usd"]
     fig, ax = plt.subplots(figsize=(7.4, 3.6))
-    ax.hist(raw[raw <= 1.5], bins=60, color="#4C78A8")
-    ax.axvline(caps.median(), color="#E45756", lw=1.3)
+    ax.hist(raw[raw <= 1.5], bins=60, color=BLUE, edgecolor="white", linewidth=0.3)
+    ax.axvline(caps.median(), color=ORANGE, lw=1.4, zorder=3)
     ax.set_xlim(-1.0, 1.5)
     ax.set_xlabel("Forward one-month return")
     ax.set_ylabel("Stock-months")
     n_above = int((raw > 1.5).sum())
     ax.set_title(f"Return distribution ({n_above} stock-months above 1.5; max {raw.max():.2f})")
-    save_fig(fig, "2a_returns.png",
-             "Red line: median across months of that month's 99th percentile. Winsorizing is applied inside each month, upper tail only.")
+    save_fig(fig, "2a_returns.png")
 
     fig, ax = plt.subplots(figsize=(7.4, 3.6))
-    ax.plot(months, coverage.to_numpy(), color="#4C78A8", lw=1.2)
+    ax.plot(months, coverage.to_numpy(), color=BLUE, lw=1.4)
     ax.set_ylim(0, 1.05)
     ax.set_ylabel("Share non-missing")
     ax.set_title("Return coverage each month")
-    save_fig(fig, "2a_coverage.png",
-             "Share of stocks that month with a non-missing R1M_Usd. The field is the return over the following month.")
+    save_fig(fig, "2a_coverage.png")
 
     fig, ax = plt.subplots(figsize=(7.4, 3.6))
-    ax.hist(df["Pb"], bins=np.arange(0.005, 1.015, 0.01), color="#4C78A8")
-    ax.axvline(0.5, color="#E45756", lw=1.3)
+    ax.hist(df["Pb"], bins=np.arange(0.005, 1.015, 0.01), color=BLUE, edgecolor="white", linewidth=0.2)
+    ax.axvline(0.5, color=ORANGE, lw=1.4, zorder=3)
     ax.set_xlabel("Price-to-book percentile (1 = highest P/B)")
     ax.set_ylabel("Stock-months")
     ax.set_title("Standardized price-to-book")
-    save_fig(fig, "2a_pb.png",
-             "Percentile grid 0.01–1.00. Red line marks the 0.50 bin, the modal value in every month.")
+    save_fig(fig, "2a_pb.png")
 
     rhos = []
     for _, g in df.groupby("form"):
@@ -242,16 +247,20 @@ def write_results(returns, last, usa, hml):
     ])
     (OUT / "2b_market.txt").write_text(text + "\n")
 
-    fig, ax = plt.subplots(figsize=(5.4, 5.2))
-    ax.scatter(100 * usa, 100 * returns["mkt"], s=12, alpha=0.5, color="#4C78A8", linewidths=0)
+    fig, ax = plt.subplots(figsize=(5.6, 5.4))
+    ax.scatter(100 * usa, 100 * returns["mkt"], s=22, c=BLUE, alpha=0.55, zorder=2)
     lo = min(100 * usa.min(), 100 * returns["mkt"].min())
     hi = max(100 * usa.max(), 100 * returns["mkt"].max())
-    ax.plot([lo, hi], [lo, hi], color="#E45756", lw=1)
+    pad = 0.06 * (hi - lo)
+    ax.plot([lo, hi], [lo, hi], color=ORANGE, lw=1.8, zorder=4, label="Same as market")
+    ax.set_xlim(lo - pad, hi + pad)
+    ax.set_ylim(lo - pad, hi + pad)
+    ax.set_aspect("equal", adjustable="box")
     ax.set_xlabel("MSCI USA (% per month)")
     ax.set_ylabel("Cap-weight proxy (% per month)")
-    ax.set_title(f"Cap-weight proxy vs MSCI USA (corr {corr:.2f})")
-    save_fig(fig, "2b_market.png",
-             "Jan 1999–Dec 2018. Red line is the 45-degree line. Proxy uses percentile market cap, not actual cap weights.")
+    ax.set_title(f"Cap-weight proxy vs MSCI USA (corr {corr:.2f})", pad=8)
+    ax.legend(frameon=False, loc="upper left")
+    save_fig(fig, "2b_market.png")
 
     excess = pd.DataFrame({
         "EW top 20%": returns["ew"] - returns["mkt"],
@@ -272,7 +281,7 @@ def write_results(returns, last, usa, hml):
 
 
 def main():
-    OUT.mkdir(exist_ok=True)
+    OUT.mkdir(parents=True, exist_ok=True)
     df = load_stocks()
     write_cleaning(df)
     returns, last = run_portfolios(df)

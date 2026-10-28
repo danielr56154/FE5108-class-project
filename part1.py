@@ -11,21 +11,32 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.colors import LinearSegmentedColormap
 import pandas as pd
 from openpyxl import load_workbook
 from scipy.stats import linregress
 
 ROOT = Path(__file__).resolve().parent
 SRC = ROOT / "data" / "ff_msci.xlsx"
-OUT = ROOT / "exhibits"
+OUT = ROOT / "exhibits" / "part1"
 
 plt.rcParams.update({
     "figure.dpi": 140,
     "savefig.bbox": "tight",
-    "axes.spines.top": False,
-    "axes.spines.right": False,
+    "savefig.facecolor": "white",
+    "figure.facecolor": "white",
+    "axes.facecolor": "white",
+    "axes.edgecolor": "#333333",
+    "axes.labelcolor": "#222222",
+    "axes.titlecolor": "#1F4E79",
+    "text.color": "#222222",
+    "axes.grid": True,
+    "grid.color": "#E6E6E6",
+    "grid.linewidth": 0.7,
+    "axes.axisbelow": True,
     "font.size": 10,
 })
+BLUE, ORANGE = "#4C78A8", "#F58518"
 
 
 def month_stamp(value):
@@ -149,8 +160,7 @@ def ann_stats(series, rf):
     return 12 * float(series.mean()), vol, sharpe
 
 
-def save_fig(fig, name, note):
-    fig.text(0.0, -0.02, note, fontsize=7, color="#444444", ha="left", transform=fig.transFigure)
+def save_fig(fig, name):
     fig.tight_layout()
     fig.savefig(OUT / name)
     plt.close(fig)
@@ -201,18 +211,20 @@ def write_performance(msci, rf):
     (OUT / "1c_performance.txt").write_text("\n".join(lines) + "\n")
 
     order = sorted(rows, key=lambda name: rows[name][2])
-    colors = ["#4C78A8" if name != "Multi-factor" else "#F58518" for name in order]
+    colors = [ORANGE if name == "Multi-factor" else BLUE for name in order]
     fig, axes = plt.subplots(1, 2, figsize=(9.2, 4.4), sharey=True)
     y = np.arange(len(order))
-    axes[0].barh(y, [100 * rows[name][0] for name in order], color=colors)
-    axes[1].barh(y, [rows[name][2] for name in order], color=colors)
+    axes[0].barh(y, [100 * rows[name][0] for name in order], color=colors, zorder=3)
+    axes[1].barh(y, [rows[name][2] for name in order], color=colors, zorder=3)
     axes[0].set_xlabel("Annualized average return (%)")
     axes[1].set_xlabel("Sharpe ratio")
     axes[0].set_yticks(y, order)
-    axes[1].axvline(0, color="#888888", lw=0.6)
-    fig.suptitle("MSCI USA factor indexes, Jan 1995–Jul 2023", y=1.02)
-    save_fig(fig, "1c_performance.png",
-             "Gross total return, USD. Multi-factor (orange) averages the four smart-beta indexes. Sorted by Sharpe. Source: MSCI, Ken French RF.")
+    axes[1].axvline(0, color="black", lw=0.6, zorder=2)
+    for ax in axes:
+        ax.yaxis.grid(False)
+        ax.xaxis.grid(True)
+    fig.suptitle("MSCI USA factor indexes, Jan 1995–Jul 2023", color="#1F4E79", y=1.02)
+    save_fig(fig, "1c_performance.png")
 
 
 def write_corr(msci, factors, mom, low_beta):
@@ -242,23 +254,18 @@ def write_corr(msci, factors, mom, low_beta):
         lines.append(f"{name:<16}" + "".join(f"{value:16.2f}" for value in row))
     (OUT / "1d_corr.txt").write_text("\n".join(lines) + "\n")
 
-    fig, ax = plt.subplots(figsize=(5.1, 4.8))
-    image = ax.imshow(corr.to_numpy(), cmap="coolwarm", vmin=-1, vmax=1, aspect="equal")
+    fig, ax = plt.subplots(figsize=(5.1, 4.6))
+    cmap = LinearSegmentedColormap.from_list("nus", [BLUE, "#F7F7F7", ORANGE])
+    image = ax.imshow(corr.to_numpy(), cmap=cmap, vmin=-1, vmax=1, aspect="equal")
     ax.set_xticks(range(corr.shape[1]), corr.columns, rotation=20, ha="right")
     ax.set_yticks(range(corr.shape[0]), corr.index)
+    ax.grid(False)
     for i in range(corr.shape[0]):
         for j in range(corr.shape[1]):
-            ax.text(j, i, f"{corr.iloc[i, j]:.2f}", ha="center", va="center", fontsize=9)
+            ax.text(j, i, f"{corr.iloc[i, j]:.2f}", ha="center", va="center", fontsize=9, color="#222222")
     fig.colorbar(image, ax=ax, fraction=0.046, pad=0.04)
     ax.set_title("Factor-spread correlations, Jan 1995–Jul 2023")
-    fig.tight_layout(rect=(0, 0.10, 1, 1))
-    fig.text(
-        0.5, 0.01,
-        "MSCI gross total return minus MSCI USA,\nvs Ken French value-weighted spreads. USA large and mid cap.",
-        ha="center", va="bottom", fontsize=8, color="#444444",
-    )
-    fig.savefig(OUT / "1d_corr.png")
-    plt.close(fig)
+    save_fig(fig, "1d_corr.png")
 
 
 def write_momentum_vol(mkt, mom):
@@ -288,20 +295,20 @@ def write_momentum_vol(mkt, mom):
     ]
     (OUT / "1e_regimes.txt").write_text("\n".join(lines) + "\n")
 
-    fig, ax = plt.subplots(figsize=(6.6, 4.4))
-    ax.scatter(100 * paired["vol"], 100 * paired["mom"], s=12, alpha=0.45, color="#4C78A8", linewidths=0)
+    fig, ax = plt.subplots(figsize=(6.8, 4.6))
+    ax.scatter(100 * paired["vol"], 100 * paired["mom"], s=18, c=BLUE, alpha=0.45, zorder=2)
     x = np.linspace(100 * paired["vol"].min(), 100 * paired["vol"].max(), 50)
-    ax.plot(x, fit.intercept + fit.slope * x, color="#E45756", lw=1.5)
-    ax.axhline(0, color="#888888", lw=0.6)
+    ax.axhline(0, color="0.35", lw=0.7, zorder=1)
+    ax.plot(x, fit.intercept + fit.slope * x, color=ORANGE, lw=2.2, zorder=4, label="Fitted line")
     ax.set_xlabel("Lagged 12-month market volatility (% ann.)")
     ax.set_ylabel("Momentum spread (% per month)")
-    ax.set_title("Momentum vs lagged market volatility, Dec 1995–Jul 2023")
-    save_fig(fig, "1e_momentum_vol.png",
-             "Value-weighted FF momentum decile spread. Volatility uses Mkt-RF through the previous month. Ken French.")
+    ax.set_title("Momentum vs lagged market volatility, Dec 1995–Jul 2023", pad=8)
+    ax.legend(frameon=False, loc="lower left")
+    save_fig(fig, "1e_momentum_vol.png")
 
 
 def main():
-    OUT.mkdir(exist_ok=True)
+    OUT.mkdir(parents=True, exist_ok=True)
     factors = load_factors()
     mom = load_momentum().rename("mom")
     low_beta = load_low_beta().rename("low_beta")

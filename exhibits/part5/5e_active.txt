@@ -1,0 +1,12 @@
+Exhibit 5E — active return versus MSCI USA
+Jan 1995–Jul 2023. Active return is the index minus MSCI USA.
+The multi-factor index is the equal-weighted average of Value, Min vol, Equal weight, and Momentum.
+Annualized excess return is 12 × the arithmetic monthly mean. Tracking error is monthly std × sqrt(12).
+Information ratio is annualized excess return divided by tracking error.
+
+index             ann_excess        te      ir
+Multi-factor            0.15      3.39    0.04
+Value                  -1.34      5.15   -0.26
+Min vol                -0.80      6.38   -0.12
+Equal weight            0.59      5.40    0.11
+Momentum                2.16      7.73    0.28

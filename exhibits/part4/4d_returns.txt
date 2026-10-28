@@ -1,0 +1,14 @@
+Exhibit 4D — compounded total return, NVDA and NVDL
+Each month compounds that month’s daily total returns. Feb–Aug compounds the full sample, 1 Feb 2024–30 Aug 2024.
+The 2× NVDA column is twice the stock’s compounded return, the figure a constant 2× multiple would produce.
+Figures in percent.
+
+window            nvda      nvdl   2x_nvda
+2024-02          28.60     59.11     57.19
+2024-03          14.21     25.76     28.42
+2024-04          -4.37    -12.22     -8.74
+2024-05          26.88     55.72     53.76
+2024-06          12.70     22.60     25.40
+2024-07          -5.28    -14.68    -10.56
+2024-08           2.01     -1.60      4.02
+Feb–Aug          94.05    181.53    188.10

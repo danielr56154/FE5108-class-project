@@ -1,0 +1,15 @@
+Exhibit 5B — MSCI USA Value on the Fama-French factors
+Monthly gross total return, Jan 1995–Jul 2023. OLS with an intercept. t-stats are not Newey-West.
+Slopes are unitless (return on return). The intercept is a monthly decimal return.
+
+n = 343    R² = 0.948
+term              coef       t
+Intercept       -0.001   -0.91
+RF               0.865    2.79
+Mkt-RF           0.948   76.99
+HML              0.322   19.68
+SMB             -0.174   -9.90
+
+Exhibit 5C — the intercept is the monthly average MSCI Value return not explained by RF, Mkt-RF, HML, and SMB.
+Monthly intercept: -0.071%
+× 12: -0.86%
