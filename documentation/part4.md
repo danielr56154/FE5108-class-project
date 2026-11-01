@@ -20,7 +20,7 @@ $$
 r_{\text{NVDL},t} = a + b\, r_{\text{NVDA},t} + e_t
 $$
 
-Confidence intervals are 95%, using a \(t\) critical value with \(n-2\) degrees of freedom. The factsheet’s daily objective, before fees, is \(b = 2\) and \(a = 0\). The dashed line on the chart is \(y = 2x\).
+Confidence intervals are 95%, using a \(t\) critical value with \(n-2\) degrees of freedom. The factsheet’s daily objective, before fees, is \(b = 2\) and \(a = 0\). The line on the chart is \(y = 2x\).
 
 ## 4C
 
