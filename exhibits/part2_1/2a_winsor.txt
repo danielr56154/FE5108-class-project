@@ -1,0 +1,9 @@
+Exhibit 2A — winsorization of the forward one-month return
+Each month, returns are clipped at that month's percentiles. Missing returns are never filled with zero.
+Missing returns: 0 of 283380 rows (lowest monthly coverage 1.000).
+Raw min -0.922, raw max 30.176, raw median 0.0110.
+
+definition                  rows clipped low  rows clipped high  min after  max after
+Two-sided 0.5% / 99.5%                  1440               1443     -0.660      1.691
+Upper 99% only                             0               2855     -0.922      1.473
+No winsorization                           0                  0     -0.922     30.176

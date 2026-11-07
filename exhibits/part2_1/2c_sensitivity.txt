@@ -1,0 +1,19 @@
+Exhibit 2C — sensitivity to the winsorization definition
+Same portfolios and window as 2C (Pb = 0.50 rows excluded from the value portfolios). Compounded return and tracking error in percent versus the proxy built under the same definition.
+
+definition                strategy           compounded  ann_vol     te
+Two-sided 0.5% / 99.5%    Cap-weight proxy         8.43    16.49   0.00
+Two-sided 0.5% / 99.5%    EW top 20% B/P          17.80    22.44  10.02
+Two-sided 0.5% / 99.5%    B/P score               13.33    18.79   5.09
+Two-sided 0.5% / 99.5%    B/P score x cap          9.76    17.37   2.98
+
+Upper 99% only            Cap-weight proxy         7.39    16.45   0.00
+Upper 99% only            EW top 20% B/P          16.02    22.30   9.87
+Upper 99% only            B/P score               12.03    18.73   5.05
+Upper 99% only            B/P score x cap          8.91    17.35   2.96
+
+No winsorization          Cap-weight proxy         8.91    16.59   0.00
+No winsorization          EW top 20% B/P          24.88    23.37  11.79
+No winsorization          B/P score               16.17    18.97   5.57
+No winsorization          B/P score x cap         10.91    17.50   3.20
+

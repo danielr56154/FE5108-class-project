@@ -1,0 +1,12 @@
+Exhibit 2C — book-to-price portfolios, formation Dec 1998–Nov 2018 (return months Jan 1999–Dec 2018, 240 months)
+Long-only, fully invested. Book-to-price score = 1 − price-to-book percentile. Returns use two-sided 0.5% / 99.5% winsorization.
+Value portfolios exclude rows with Pb exactly 0.50 (likely filled for negative book equity) and rescale weights; the cap-weight proxy keeps them.
+compounded = (prod(1+r))^(12/T) − 1. arithmetic = 12 × monthly mean. ann_vol and TE = monthly std × sqrt(12).
+TE is versus the cap-weight proxy. Returns, vol, TE and max_w are in percent. n_names counts positive weights.
+avg / max are over the 240 formation dates; last is the Nov 2018 formation.
+
+strategy           compounded arithmetic  ann_vol     te   n_avg  n_min  n_last  maxw_avg  maxw_max maxw_last
+Cap-weight proxy         8.43       9.49    16.49   0.00    1165    875    1109      0.17      0.23      0.18
+EW top 20% B/P          17.80      18.94    22.44  10.02     225    164     211      0.45      0.61      0.47
+B/P score               13.33      14.33    18.79   5.09    1112    812    1047      0.18      0.23      0.19
+B/P score x cap          9.76      10.87    17.37   2.98    1112    812    1047      0.37      0.47      0.40
