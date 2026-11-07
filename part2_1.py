@@ -168,9 +168,16 @@ def write_cleaning(df):
     save_fig(fig, "2a_coverage.png")
 
     at_half = np.isclose(df["Pb"], 0.5)
+    # Full histogram so the 0.50 spike is visible; the 0.50 bin is highlighted in orange.
     fig, ax = plt.subplots(figsize=(7.4, 3.6))
-    ax.hist(df.loc[~at_half, "Pb"], bins=np.arange(0.005, 1.015, 0.01), color=BLUE, edgecolor="white", linewidth=0.2)
-    ax.set_xlabel("Price-to-book percentile (1 = highest P/B), 0.50 bin excluded")
+    _, edges, patches = ax.hist(df["Pb"], bins=np.arange(0.005, 1.015, 0.01), color=BLUE, edgecolor="white", linewidth=0.2)
+    for patch, left in zip(patches, edges[:-1]):
+        if left < 0.5 < left + 0.01:
+            patch.set_facecolor(ORANGE)
+    n_half = int(at_half.sum())
+    ax.annotate(f"Pb = 0.50: {n_half:,} stock-months", xy=(0.5, n_half), xytext=(0.62, 0.92 * n_half),
+                color=ORANGE, fontsize=9, arrowprops=dict(arrowstyle="->", color=ORANGE, lw=1.0))
+    ax.set_xlabel("Price-to-book percentile (1 = highest P/B)")
     ax.set_ylabel("Stock-months")
     ax.set_title(f"Standardized price-to-book ({100 * at_half.mean():.1f}% of rows sit exactly at 0.50)")
     save_fig(fig, "2a_pb.png")
@@ -359,7 +366,9 @@ def write_sensitivity(results):
     write("2c_sensitivity.txt", lines)
 
 
-def write_exclusion(kept, dropped, hml):
+def write_exclusion(excluded, kept, hml):
+    """excluded: results with Pb = 0.50 rows dropped from the value portfolios (main case).
+    kept: results with those rows kept. Each is (returns, held, maxw)."""
     lines = [
         "Exhibit 2C — excluding versus keeping rows with Pb exactly 0.50 in the value portfolios",
         f"Winsorization: {MODES[MAIN].lower()}. The cap-weight proxy is the same in both cases. Percent except counts and correlation.",
@@ -367,8 +376,8 @@ def write_exclusion(kept, dropped, hml):
         "",
         f"{'treatment':<10}{'strategy':<18}{'compounded':>11}{'ann_vol':>9}{'te':>7}{'n_last':>8}{'maxw_last':>10}{'corr_hml':>10}",
     ]
-    hml = hml.reindex(kept[0].index)
-    for label, (returns, held, maxw) in (("excluded", kept), ("kept", dropped)):
+    hml = hml.reindex(excluded[0].index)
+    for label, (returns, held, maxw) in (("excluded", excluded), ("kept", kept)):
         for key in ("ew", "score", "score_cap"):
             excess = returns[key] - returns["mkt"]
             lines.append(
