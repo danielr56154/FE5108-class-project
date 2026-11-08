@@ -33,14 +33,18 @@ plt.rcParams.update({
     "grid.color": "#E6E6E6",
     "grid.linewidth": 0.7,
     "axes.axisbelow": True,
-    "font.size": 10,
+    "font.size": 9,
+    "axes.labelsize": 9,
+    "xtick.labelsize": 8,
+    "ytick.labelsize": 8,
+    "legend.fontsize": 8,
+    "legend.frameon": False,
 })
-BLUE, ORANGE, GREEN, RED = "#4C78A8", "#F58518", "#54A24B", "#E45756"
+BLUE, ORANGE = "#4C78A8", "#F58518"
 
 
 def save_fig(fig, name):
-    fig.tight_layout()
-    fig.savefig(OUT / name)
+    fig.savefig(OUT / name, bbox_inches="tight", pad_inches=0.05)
     plt.close(fig)
 
 
@@ -116,20 +120,21 @@ def write_replication(msci, factors, y, beta):
         lines.append(f"{name:<16}{100 * ret:12.2f}{100 * vol:10.2f}{sharpe:8.2f}")
     (OUT / "5d_replication.txt").write_text("\n".join(lines) + "\n")
 
-    fig, ax = plt.subplots(figsize=(5.6, 5.4))
-    ax.scatter(100 * y, 100 * replica, s=22, c=BLUE, alpha=0.55, zorder=2)
+    fig, ax = plt.subplots(figsize=(6.8, 3.35))
+    ax.scatter(100 * y, 100 * replica, s=14, c=BLUE, alpha=0.6, linewidths=0, zorder=2)
     lo = min(100 * y.min(), 100 * replica.min())
     hi = max(100 * y.max(), 100 * replica.max())
     pad = 0.06 * (hi - lo)
-    ax.plot([lo, hi], [lo, hi], color=ORANGE, lw=1.8, zorder=4, label="Same return")
+    ax.plot([lo, hi], [lo, hi], color=ORANGE, lw=1.4, zorder=4, label="Same return")
     ax.set_xlim(lo - pad, hi + pad)
     ax.set_ylim(lo - pad, hi + pad)
-    ax.set_aspect("equal", adjustable="box")
+    ax.set_box_aspect(0.62)
     ax.set_xlabel("MSCI Value (% per month)")
-    ax.set_ylabel("Factor replica (% per month)")
-    ax.set_title(f"Value index and its factor replica (corr {corr:.2f})", pad=8)
-    ax.legend(frameon=False, loc="upper left")
-    save_fig(fig, "5d_replication.png")
+    ax.set_ylabel("Factor replica (% per month)", labelpad=6)
+    ax.legend(loc="upper left", borderaxespad=0.2, handlelength=1.6)
+    fig.subplots_adjust(left=0.12, right=0.98, bottom=0.16, top=0.96)
+    fig.savefig(OUT / "5d_replication.png", bbox_inches="tight", pad_inches=0.18)
+    plt.close(fig)
     return replica
 
 
@@ -192,12 +197,14 @@ def write_variance(active):
         lines.append(f"{name:<16}{cov:14.6e}{100 * share:9.1f}%")
     (OUT / "5f_variance.txt").write_text("\n".join(lines) + "\n")
 
-    fig, ax = plt.subplots(figsize=(6.2, 3.6))
-    colors = [BLUE, GREEN, ORANGE, RED]
-    ax.bar(COMPONENTS, 100 * shares, color=colors, zorder=3)
-    ax.xaxis.grid(False)
-    ax.set_ylabel("Share of active variance (%)")
-    ax.set_title("Drivers of multi-factor tracking error")
+    order = list(np.argsort(shares))
+    names = [COMPONENTS[i] for i in order]
+    colors = [ORANGE if COMPONENTS[i] == "Min vol" else BLUE for i in order]
+    fig, ax = plt.subplots(figsize=(5.5, 1.95))
+    ax.barh(names, 100 * shares[order], color=colors, height=0.62, zorder=3)
+    ax.yaxis.grid(False)
+    ax.tick_params(axis="y", length=0)
+    ax.set_xlabel("Share of active variance (%)")
     save_fig(fig, "5f_variance.png")
 
 

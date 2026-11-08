@@ -32,9 +32,14 @@ plt.rcParams.update({
     "text.color": "#222222",
     "axes.grid": True,
     "grid.color": "#E6E6E6",
-    "grid.linewidth": 0.7,
+    "grid.linewidth": 0.6,
     "axes.axisbelow": True,
-    "font.size": 10,
+    "font.size": 9,
+    "axes.labelsize": 9,
+    "xtick.labelsize": 8,
+    "ytick.labelsize": 8,
+    "legend.fontsize": 8,
+    "legend.frameon": False,
 })
 BLUE, ORANGE = "#4C78A8", "#F58518"
 
@@ -161,8 +166,7 @@ def ann_stats(series, rf):
 
 
 def save_fig(fig, name):
-    fig.tight_layout()
-    fig.savefig(OUT / name)
+    fig.savefig(OUT / name, bbox_inches="tight", pad_inches=0.05)
     plt.close(fig)
 
 
@@ -212,18 +216,24 @@ def write_performance(msci, rf):
 
     order = sorted(rows, key=lambda name: rows[name][2])
     colors = [ORANGE if name == "Multi-factor" else BLUE for name in order]
-    fig, axes = plt.subplots(1, 2, figsize=(9.2, 4.4), sharey=True)
+    fig, axes = plt.subplots(1, 2, figsize=(7.15, 2.28), sharey=True, gridspec_kw={"wspace": 0.08})
     y = np.arange(len(order))
-    axes[0].barh(y, [100 * rows[name][0] for name in order], color=colors, zorder=3)
-    axes[1].barh(y, [rows[name][2] for name in order], color=colors, zorder=3)
-    axes[0].set_xlabel("Annualized average return (%)")
+    axes[0].barh(y, [100 * rows[name][0] for name in order], color=colors, height=0.62, zorder=3)
+    axes[1].barh(y, [rows[name][2] for name in order], color=colors, height=0.62, zorder=3)
+    axes[0].set_xlabel("Annualized return (%)")
     axes[1].set_xlabel("Sharpe ratio")
     axes[0].set_yticks(y, order)
-    axes[1].axvline(0, color="black", lw=0.6, zorder=2)
+    axes[0].tick_params(axis="y", length=0)
+    axes[1].tick_params(axis="y", length=0)
     for ax in axes:
         ax.yaxis.grid(False)
-        ax.xaxis.grid(True)
-    fig.suptitle("MSCI USA factor indexes, Jan 1995–Jul 2023", color="#1F4E79", y=1.02)
+        ax.margins(y=0.06)
+    axes[0].legend(
+        [plt.Rectangle((0, 0), 1, 1, color=ORANGE)],
+        ["Multi-factor"],
+        loc="lower right",
+        borderaxespad=0.2,
+    )
     save_fig(fig, "1c_performance.png")
 
 
@@ -254,17 +264,24 @@ def write_corr(msci, factors, mom, low_beta):
         lines.append(f"{name:<16}" + "".join(f"{value:16.2f}" for value in row))
     (OUT / "1d_corr.txt").write_text("\n".join(lines) + "\n")
 
-    fig, ax = plt.subplots(figsize=(5.1, 4.6))
-    cmap = LinearSegmentedColormap.from_list("nus", [BLUE, "#F7F7F7", ORANGE])
+    fig, ax = plt.subplots(figsize=(4.15, 2.15))
+    cmap = LinearSegmentedColormap.from_list("nus", [BLUE, "#F4F4F4", ORANGE])
     image = ax.imshow(corr.to_numpy(), cmap=cmap, vmin=-1, vmax=1, aspect="equal")
-    ax.set_xticks(range(corr.shape[1]), corr.columns, rotation=20, ha="right")
-    ax.set_yticks(range(corr.shape[0]), corr.index)
+    ax.set_xticks(range(4), ["HML", "SMB", "Mom", "Beta"])
+    ax.set_yticks(range(4), ["Value", "Min vol", "EW", "Mom"])
+    ax.tick_params(length=0)
     ax.grid(False)
-    for i in range(corr.shape[0]):
+    for i, match in enumerate((0, 3, 1, 2)):
+        row = corr.iloc[i].to_numpy()
         for j in range(corr.shape[1]):
-            ax.text(j, i, f"{corr.iloc[i, j]:.2f}", ha="center", va="center", fontsize=9, color="#222222")
-    fig.colorbar(image, ax=ax, fraction=0.046, pad=0.04)
-    ax.set_title("Factor-spread correlations, Jan 1995–Jul 2023")
+            value = row[j]
+            ax.text(
+                j, i, f"{value:.2f}", ha="center", va="center", fontsize=8,
+                color="white" if abs(value) >= 0.55 else "#222222",
+                fontweight="bold" if j == match else "normal",
+            )
+    bar = fig.colorbar(image, ax=ax, fraction=0.046, pad=0.03)
+    bar.ax.tick_params(labelsize=7, length=0)
     save_fig(fig, "1d_corr.png")
 
 
@@ -295,15 +312,14 @@ def write_momentum_vol(mkt, mom):
     ]
     (OUT / "1e_regimes.txt").write_text("\n".join(lines) + "\n")
 
-    fig, ax = plt.subplots(figsize=(6.8, 4.6))
-    ax.scatter(100 * paired["vol"], 100 * paired["mom"], s=18, c=BLUE, alpha=0.45, zorder=2)
+    fig, ax = plt.subplots(figsize=(6.2, 3.05))
+    ax.scatter(100 * paired["vol"], 100 * paired["mom"], s=11, c=BLUE, alpha=0.45, linewidths=0, zorder=2)
     x = np.linspace(100 * paired["vol"].min(), 100 * paired["vol"].max(), 50)
-    ax.axhline(0, color="0.35", lw=0.7, zorder=1)
-    ax.plot(x, fit.intercept + fit.slope * x, color=ORANGE, lw=2.2, zorder=4, label="Fitted line")
+    ax.axhline(0, color="0.45", lw=0.6, zorder=1)
+    ax.plot(x, fit.intercept + fit.slope * x, color=ORANGE, lw=1.7, zorder=4, label="Fitted line")
     ax.set_xlabel("Lagged 12-month market volatility (% ann.)")
     ax.set_ylabel("Momentum spread (% per month)")
-    ax.set_title("Momentum vs lagged market volatility, Dec 1995–Jul 2023", pad=8)
-    ax.legend(frameon=False, loc="lower left")
+    ax.legend(loc="lower left", borderaxespad=0.2)
     save_fig(fig, "1e_momentum_vol.png")
 
 

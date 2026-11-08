@@ -14,4 +14,4 @@ python part5.py
 
 Each script reads `data/` and writes only its own files in `exhibits/part1` through `exhibits/part5`. Sample windows and formulas are in `documentation/`.
 
-The assignment is `class_project_handout.pdf`.
+The assignment is `class_project_handout.pdf`. The write-up in `report/` stays on this machine and is not part of the repo.

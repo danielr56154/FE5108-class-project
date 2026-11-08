@@ -49,7 +49,7 @@ $$
 
 `exhibits/part1/1d_corr.txt` and `exhibits/part1/1d_corr.png`
 
-Same months as 1C. Each MSCI spread is the smart-beta index minus MSCI USA. The four French spreads are `HML`, `SMB`, the value-weighted momentum decile spread, and the value-weighted low-minus-high beta spread.
+Same months as 1C. Each MSCI spread is the smart-beta index minus MSCI USA. The four French spreads are `HML`, `SMB`, the value-weighted momentum decile spread, and the value-weighted low-minus-high beta spread. Bold marks the intended counterpart (value with HML, minimum volatility with low-minus-high beta, equal weight with SMB, momentum with the prior-return spread). That cell is the strongest correlation in three of the four rows. Equal weight is the exception.
 
 ## 1E
 

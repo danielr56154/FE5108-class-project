@@ -12,6 +12,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from matplotlib.colors import LinearSegmentedColormap
 from openpyxl import load_workbook
 
 ROOT = Path(__file__).resolve().parent
@@ -33,9 +34,14 @@ plt.rcParams.update({
     "text.color": "#222222",
     "axes.grid": True,
     "grid.color": "#E6E6E6",
-    "grid.linewidth": 0.7,
+    "grid.linewidth": 0.6,
     "axes.axisbelow": True,
-    "font.size": 10,
+    "font.size": 9,
+    "axes.labelsize": 9,
+    "xtick.labelsize": 8,
+    "ytick.labelsize": 8,
+    "legend.fontsize": 8,
+    "legend.frameon": False,
 })
 BLUE, ORANGE = "#4C78A8", "#F58518"
 
@@ -61,8 +67,7 @@ def as_period(value):
 
 
 def save_fig(fig, name):
-    fig.tight_layout()
-    fig.savefig(OUT / name)
+    fig.savefig(OUT / name, bbox_inches="tight", pad_inches=0.05)
     plt.close(fig)
 
 
@@ -112,36 +117,31 @@ def write_cleaning(df):
     caps = df.groupby("form")["R1M_Usd"].quantile(0.99)
     months = counts.index.to_timestamp("M")
 
-    fig, ax = plt.subplots(figsize=(7.4, 3.6))
-    ax.plot(months, counts.to_numpy(), color=BLUE, lw=1.4)
+    fig, ax = plt.subplots(figsize=(6.5, 2.25))
+    ax.plot(months, counts.to_numpy(), color=BLUE, lw=1.25)
     ax.set_ylabel("Number of stocks")
-    ax.set_title("Stocks in the file each month")
     save_fig(fig, "2a_counts.png")
 
     raw = df["R1M_Usd"]
-    fig, ax = plt.subplots(figsize=(7.4, 3.6))
-    ax.hist(raw[raw <= 1.5], bins=60, color=BLUE, edgecolor="white", linewidth=0.3)
-    ax.axvline(caps.median(), color=ORANGE, lw=1.4, zorder=3)
+    fig, ax = plt.subplots(figsize=(6.5, 2.25))
+    ax.hist(raw[raw <= 1.5], bins=50, color=BLUE, edgecolor="white", linewidth=0.25)
+    ax.axvline(caps.median(), color=ORANGE, lw=1.3, zorder=3)
     ax.set_xlim(-1.0, 1.5)
     ax.set_xlabel("Forward one-month return")
     ax.set_ylabel("Stock-months")
-    n_above = int((raw > 1.5).sum())
-    ax.set_title(f"Return distribution ({n_above} stock-months above 1.5; max {raw.max():.2f})")
     save_fig(fig, "2a_returns.png")
 
-    fig, ax = plt.subplots(figsize=(7.4, 3.6))
-    ax.plot(months, coverage.to_numpy(), color=BLUE, lw=1.4)
-    ax.set_ylim(0, 1.05)
+    fig, ax = plt.subplots(figsize=(6.5, 1.7))
+    ax.plot(months, coverage.to_numpy(), color=BLUE, lw=1.25)
+    ax.set_ylim(0.9, 1.02)
     ax.set_ylabel("Share non-missing")
-    ax.set_title("Return coverage each month")
     save_fig(fig, "2a_coverage.png")
 
-    fig, ax = plt.subplots(figsize=(7.4, 3.6))
-    ax.hist(df["Pb"], bins=np.arange(0.005, 1.015, 0.01), color=BLUE, edgecolor="white", linewidth=0.2)
-    ax.axvline(0.5, color=ORANGE, lw=1.4, zorder=3)
+    fig, ax = plt.subplots(figsize=(6.5, 2.15))
+    ax.hist(df["Pb"], bins=np.arange(0.005, 1.015, 0.01), color=BLUE, edgecolor="white", linewidth=0.15)
+    ax.axvline(0.5, color=ORANGE, lw=1.3, zorder=3)
     ax.set_xlabel("Price-to-book percentile (1 = highest P/B)")
     ax.set_ylabel("Stock-months")
-    ax.set_title("Standardized price-to-book")
     save_fig(fig, "2a_pb.png")
 
     rhos = []
@@ -247,20 +247,40 @@ def write_results(returns, last, usa, hml):
     ])
     (OUT / "2b_market.txt").write_text(text + "\n")
 
-    fig, ax = plt.subplots(figsize=(5.6, 5.4))
-    ax.scatter(100 * usa, 100 * returns["mkt"], s=22, c=BLUE, alpha=0.55, zorder=2)
+    start = returns.index[0] - 1
+    proxy = pd.concat([pd.Series({start: 1.0}), (1 + returns["mkt"]).cumprod()])
+    market = pd.concat([pd.Series({start: 1.0}), (1 + usa).cumprod()])
+    fig, axes = plt.subplots(1, 2, figsize=(7.5, 2.7))
+    fig.subplots_adjust(wspace=0.55)
+    axes[0].plot(market.index.to_timestamp("M"), market.to_numpy(), color=BLUE, lw=1.25, label="MSCI USA")
+    axes[0].plot(proxy.index.to_timestamp("M"), proxy.to_numpy(), color=ORANGE, lw=1.25, label="Cap-weight proxy")
+    axes[0].set_ylabel("Growth of 1")
+    axes[0].legend(loc="upper left", borderaxespad=0.15)
     lo = min(100 * usa.min(), 100 * returns["mkt"].min())
     hi = max(100 * usa.max(), 100 * returns["mkt"].max())
-    pad = 0.06 * (hi - lo)
-    ax.plot([lo, hi], [lo, hi], color=ORANGE, lw=1.8, zorder=4, label="Same as market")
-    ax.set_xlim(lo - pad, hi + pad)
-    ax.set_ylim(lo - pad, hi + pad)
-    ax.set_aspect("equal", adjustable="box")
-    ax.set_xlabel("MSCI USA (% per month)")
-    ax.set_ylabel("Cap-weight proxy (% per month)")
-    ax.set_title(f"Cap-weight proxy vs MSCI USA (corr {corr:.2f})", pad=8)
-    ax.legend(frameon=False, loc="upper left")
+    span = 0.04 * (hi - lo)
+    axes[1].scatter(100 * usa, 100 * returns["mkt"], s=12, c=BLUE, alpha=0.55, linewidths=0, zorder=2)
+    axes[1].plot([lo, hi], [lo, hi], color=ORANGE, lw=1.4, zorder=4, label="Same as market")
+    axes[1].set_xlim(lo - span, hi + span)
+    axes[1].set_ylim(lo - span, hi + span)
+    axes[1].set_xlabel("MSCI USA (% per month)")
+    axes[1].set_ylabel("Cap-weight proxy (% per month)", labelpad=6)
+    axes[1].legend(loc="upper left", borderaxespad=0.15)
     save_fig(fig, "2b_market.png")
+
+    fig, ax = plt.subplots(figsize=(6.5, 2.6))
+    for key, label, color in (
+        ("mkt", "Cap-weight proxy", "#333333"),
+        ("ew", "EW top 20% B/P", ORANGE),
+        ("score", "B/P score", BLUE),
+        ("score_cap", "B/P score × cap", "#54A24B"),
+    ):
+        path = pd.concat([pd.Series({start: 1.0}), (1 + returns[key]).cumprod()])
+        ax.plot(path.index.to_timestamp("M"), path.to_numpy(), color=color, lw=1.2, label=label)
+    ax.set_yscale("log")
+    ax.set_ylabel("Growth of 1")
+    ax.legend(loc="upper left", fontsize=7.5, borderaxespad=0.15)
+    save_fig(fig, "2c_wealth.png")
 
     excess = pd.DataFrame({
         "EW top 20%": returns["ew"] - returns["mkt"],
@@ -278,6 +298,20 @@ def write_results(returns, last, usa, hml):
     for name, row in c.iterrows():
         lines.append(f"{name:<14}" + "".join(f"{value:14.2f}" for value in row))
     (OUT / "2d_corr.txt").write_text("\n".join(lines) + "\n")
+    fig, ax = plt.subplots(figsize=(3.35, 2.55))
+    cmap = LinearSegmentedColormap.from_list("nus", ["#F4F7FB", BLUE])
+    ax.imshow(c.to_numpy(), cmap=cmap, vmin=0, vmax=1, aspect="equal")
+    short = ["EW 20%", "B/P", "× cap", "HML"]
+    ax.set_xticks(range(4), short)
+    ax.set_yticks(range(4), short)
+    ax.tick_params(length=0)
+    ax.grid(False)
+    for i in range(4):
+        for j in range(4):
+            value = c.iloc[i, j]
+            ax.text(j, i, f"{value:.2f}", ha="center", va="center", fontsize=8,
+                    color="white" if value >= 0.75 else "#222222")
+    save_fig(fig, "2d_corr.png")
 
 
 def main():

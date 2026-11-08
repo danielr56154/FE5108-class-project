@@ -32,14 +32,18 @@ plt.rcParams.update({
     "grid.color": "#E6E6E6",
     "grid.linewidth": 0.7,
     "axes.axisbelow": True,
-    "font.size": 10,
+    "font.size": 9,
+    "axes.labelsize": 9,
+    "xtick.labelsize": 8,
+    "ytick.labelsize": 8,
+    "legend.fontsize": 8,
+    "legend.frameon": False,
 })
 BLUE, ORANGE = "#4C78A8", "#F58518"
 
 
 def save_fig(fig, name):
-    fig.tight_layout()
-    fig.savefig(OUT / name)
+    fig.savefig(OUT / name, bbox_inches="tight", pad_inches=0.05)
     plt.close(fig)
 
 
@@ -117,15 +121,14 @@ def write_regression(df, fit, dfree, critical):
     (OUT / "4b_regression.txt").write_text("\n".join(lines) + "\n")
 
     x = np.linspace(df["nvda"].min(), df["nvda"].max(), 40)
-    fig, ax = plt.subplots(figsize=(5.6, 5.2))
-    ax.scatter(100 * df["nvda"], 100 * df["nvdl"], s=22, c=BLUE, alpha=0.75, zorder=2)
-    ax.plot(100 * x, 200 * x, color=ORANGE, lw=1.6, zorder=3, label="2× NVDA")
+    fig, ax = plt.subplots(figsize=(4.15, 3.7))
+    ax.scatter(100 * df["nvda"], 100 * df["nvdl"], s=14, c=BLUE, alpha=0.75, linewidths=0, zorder=2)
+    ax.plot(100 * x, 200 * x, color=ORANGE, lw=1.4, zorder=3, label="2× NVDA")
     ax.axhline(0, color="0.55", lw=0.5, zorder=1)
     ax.axvline(0, color="0.55", lw=0.5, zorder=1)
     ax.set_xlabel("NVDA (% per day)")
     ax.set_ylabel("NVDL (% per day)")
-    ax.set_title(f"Daily returns, slope {fit.slope:.2f}", pad=8)
-    ax.legend(frameon=False, loc="upper left")
+    ax.legend(loc="upper left", borderaxespad=0.15)
     save_fig(fig, "4b_fit.png")
 
 
@@ -166,7 +169,7 @@ def write_paths(df):
     (OUT / "4d_returns.txt").write_text("\n".join(lines) + "\n")
 
     months, full = rows[:-1], rows[-1]
-    fig, axes = plt.subplots(1, 2, figsize=(8.4, 4.2), gridspec_kw={"width_ratios": [4.2, 1]})
+    fig, axes = plt.subplots(1, 2, figsize=(7.6, 2.55), gridspec_kw={"width_ratios": [3.4, 1.15], "wspace": 0.62})
     for ax, block in ((axes[0], months), (axes[1], [full])):
         x = np.arange(len(block))
         heights = [100 * v for row in block for v in (row[1], row[2])]
@@ -180,10 +183,9 @@ def write_paths(df):
         tick = [pd.Period(row[0], freq="M").strftime("%b") if row[0][:2] == "20" else row[0] for row in block]
         ax.set_xticks(x, tick)
     axes[0].set_ylabel("Compounded return (%)")
-    axes[0].set_title("Each month", pad=8)
-    axes[1].set_title("Full sample", pad=8)
-    axes[0].legend(frameon=False, loc="upper right")
-    fig.suptitle("NVDA and NVDL, compounded beyond one day", color="#1F4E79")
+    axes[0].set_title("Each month", fontsize=9, color="#222222", pad=3)
+    axes[1].set_title("Feb–Aug", fontsize=9, color="#222222", pad=3)
+    axes[0].legend(loc="upper right", borderaxespad=0.15)
     save_fig(fig, "4d_returns.png")
 
 

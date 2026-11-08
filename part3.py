@@ -37,7 +37,12 @@ plt.rcParams.update({
     "grid.color": "#E6E6E6",
     "grid.linewidth": 0.7,
     "axes.axisbelow": True,
-    "font.size": 10,
+    "font.size": 9,
+    "axes.labelsize": 9,
+    "xtick.labelsize": 8,
+    "ytick.labelsize": 8,
+    "legend.fontsize": 8,
+    "legend.frameon": False,
 })
 BLUE, ORANGE = "#4C78A8", "#F58518"
 
@@ -234,19 +239,17 @@ def write_wealth(ind, weights, levels):
     dates_p = port_wealth.index.to_timestamp("M")
     dates_m = mkt.index.to_timestamp("M")
 
-    fig, ax = plt.subplots(figsize=(8.2, 4.6))
-    ax.axvspan(datetime(2008, 9, 1), datetime(2009, 2, 28), color=BLUE, alpha=0.12, zorder=0)
-    ax.axvspan(datetime(2020, 2, 1), datetime(2020, 3, 31), color=ORANGE, alpha=0.18, zorder=0)
-    ax.plot(dates_p, port_wealth.to_numpy(), color=BLUE, lw=1.6, label="Long-only min-var", zorder=3)
-    ax.plot(dates_m, mkt.to_numpy(), color=ORANGE, lw=1.5, label="MSCI USA", zorder=3)
+    fig, ax = plt.subplots(figsize=(6.6, 2.65))
+    ax.axvspan(datetime(2008, 9, 1), datetime(2009, 2, 28), color=BLUE, alpha=0.10, zorder=0)
+    ax.axvspan(datetime(2020, 2, 1), datetime(2020, 3, 31), color=ORANGE, alpha=0.16, zorder=0)
+    ax.plot(dates_p, port_wealth.to_numpy(), color=BLUE, lw=1.3, label="Long-only min-var", zorder=3)
+    ax.plot(dates_m, mkt.to_numpy(), color=ORANGE, lw=1.25, label="MSCI USA", zorder=3)
     ax.set_yscale("log", base=2)
     ax.yaxis.set_major_locator(LogLocator(base=2))
     ax.yaxis.set_major_formatter(ScalarFormatter())
     ax.set_ylabel("Value of $1")
-    ax.set_title("Growth of $1, 31 Dec 2004–Jul 2023")
-    ax.legend(frameon=False)
-    fig.tight_layout()
-    fig.savefig(OUT / "3e_wealth.png")
+    ax.legend(loc="upper left", borderaxespad=0.15)
+    fig.savefig(OUT / "3e_wealth.png", bbox_inches="tight", pad_inches=0.05)
     plt.close(fig)
 
 

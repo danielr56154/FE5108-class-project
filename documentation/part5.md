@@ -34,7 +34,7 @@ $$
 r_{\text{rep},t} = \hat b_{\text{RF}}\text{RF}_t + \hat b_{\text{M}}(\text{Mkt}-\text{RF})_t + \hat b_{\text{HML}}\text{HML}_t + \hat b_{\text{SMB}}\text{SMB}_t
 $$
 
-Annualized return, volatility, and Sharpe use the Part 1 definitions. Both series are gross of fees and trading costs. The write-up should give one to three reasons that comparison is not enough to choose between them. The factor portfolios are not a traded fund, the index fund has a fee, and the spreads can be costly to implement.
+Annualized return, volatility, and Sharpe use the Part 1 definitions. Both series are gross of fees and trading costs. The scatter uses the same percent scale on both axes. The orange line is equal monthly returns. The write-up should give one to three reasons that comparison is not enough to choose between them. The factor portfolios are not a traded fund, the index fund has a fee, and the spreads can be costly to implement.
 
 ## 5E
 
@@ -54,6 +54,6 @@ $$
 \mathrm{Var}(a_{\text{mf}}) = \frac{1}{4}\sum_i \mathrm{Cov}(a_{\text{mf}}, a_i).
 $$
 
-The file checks that identity. The share of component \(i\) is its covariance divided by the sum of the four covariances. The bar chart is those shares.
+The file checks that identity. The share of component \(i\) is its covariance divided by the sum of the four covariances. The bar chart is those shares. Minimum volatility, the largest share, is orange. The other three bars are blue.
 
 The write-up takes the largest share and says whether that factor is better held on its own or only inside the benchmark-relative mix, using limits to arbitrage.
