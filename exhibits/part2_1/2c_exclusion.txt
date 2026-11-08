@@ -1,0 +1,13 @@
+Exhibit 2C — excluding versus keeping rows with Pb exactly 0.50 in the value portfolios
+Winsorization: two-sided 0.5% / 99.5%. The cap-weight proxy is the same in both cases. Percent except counts and correlation.
+n_last and maxw_last are at the Nov 2018 formation. corr_hml is the excess-return correlation with HML.
+
+treatment strategy           compounded  ann_vol     te  n_last maxw_last  corr_hml
+excluded  EW top 20% B/P          17.80    22.44  10.02     211      0.47      0.55
+excluded  B/P score               13.33    18.79   5.09    1047      0.19      0.60
+excluded  B/P score x cap          9.76    17.37   2.98    1047      0.40      0.85
+
+kept      EW top 20% B/P          17.76    22.22   9.75     222      0.45      0.55
+kept      B/P score               13.52    18.83   5.05    1099      0.18      0.58
+kept      B/P score x cap          9.87    17.37   2.85    1099      0.38      0.85
+

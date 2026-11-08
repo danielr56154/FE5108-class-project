@@ -1,0 +1,12 @@
+Exhibit 2A — does the price-to-book percentile behave like market value / book?
+Pb, Bv and Mkt_Cap_3M_Usd are percentile ranks, so they cannot be divided to rebuild P/B.
+The check is on ordering and sign, month by month. Negative book equity cannot be seen in a percentile.
+Sample: 1998-11 to 2019-03, 245 months, 1207 stocks.
+
+(1) Spearman of Pb with (market-cap percentile − book percentile). Positive is the expected sign.
+    Median across months: 0.876    Share of months positive: 1.000
+(2) Within book-percentile quintiles, Spearman of Pb with market-cap percentile. Positive is the expected sign.
+    Median across months: 0.764    Share of months positive: 1.000
+(3) Rows with Pb exactly 0.50, which is the mode of the histogram and may be a filled value.
+    Share of all rows: 3.6%    Range across months: 2.7% to 7.0%
+    Rows with Pb at 0.50 and Bv at 0.50 too: 0.1%
